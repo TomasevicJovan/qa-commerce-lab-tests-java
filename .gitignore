@@ -1,0 +1,6 @@
+target/
+.idea/
+*.iml
+.vscode/
+# Local settings with the demo account: never commit (see README).
+local.properties
