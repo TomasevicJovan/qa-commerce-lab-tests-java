@@ -22,6 +22,17 @@
     <datafaker.version>2.7.0</datafaker.version>
     <assertj.version>3.27.7</assertj.version>
     <slf4j.version>2.0.20</slf4j.version>
+
+    <!-- SonarQube Cloud (analysis runs in CI: ./mvnw test-compile sonar:sonar, see the workflow). -->
+    <sonar.organization>tomasevicjovan</sonar.organization>
+    <sonar.projectKey>TomasevicJovan_qa-commerce-lab-tests-java</sonar.projectKey>
+    <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+    <!-- All code here is test automation under src/test. Analysed as main code it gets the full rule set,
+         instead of the few rules SonarQube applies to test code. -->
+    <sonar.sources>src/test/java</sonar.sources>
+    <sonar.test.exclusions>src/test/java/**/*</sonar.test.exclusions>
+    <sonar.java.binaries>target/test-classes</sonar.java.binaries>
+    <sonar.java.libraries>${settings.localRepository}/**/*.jar</sonar.java.libraries>
   </properties>
 
   <dependencies>
@@ -107,6 +118,11 @@
             <arg>-parameters</arg>
           </compilerArgs>
         </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.sonarsource.scanner.maven</groupId>
+        <artifactId>sonar-maven-plugin</artifactId>
+        <version>5.9.0.7382</version>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
