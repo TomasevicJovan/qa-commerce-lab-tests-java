@@ -88,6 +88,34 @@ jobs:
         with:
           path: target/cucumber-report/
 
+  code-analysis:
+    name: Code analysis (SonarQube Cloud)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Check out tests
+        uses: actions/checkout@v7
+        with:
+          # Full history, so SonarQube Cloud can tell new code from old.
+          fetch-depth: 0
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Compile and analyse
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          if [ -z "$SONAR_TOKEN" ]; then
+            echo "::notice::SONAR_TOKEN is not set (for example on a fork), so the analysis is skipped."
+            exit 0
+          fi
+          ./mvnw --batch-mode --no-transfer-progress test-compile sonar:sonar
+
   publish-report:
     name: Publish report to GitHub Pages
     needs: test
